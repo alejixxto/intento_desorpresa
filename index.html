@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para ti</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#0f0f14;
+    color:white;
+    font-family:Georgia,serif;
+    text-align:center;
+}
+
+.container{
+    position:relative;
+    width:420px;
+}
+
+.base{
+    width:100%;
+    display:block;
+}
+
+.flor{
+    position:absolute;
+    width:90px;
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <img src="tallos.png" class="base">
+</div>
+
+<script>
+
+const flores = ["flor1.png","flor2.png","flor3.png","flor4.png"];
+const container = document.querySelector(".container");
+
+function numero(min,max){
+    return Math.random()*(max-min)+min;
+}
+
+const cantidad = 7;
+
+for(let i=0;i<cantidad;i++){
+
+    let flor = document.createElement("img");
+    flor.src = flores[Math.floor(Math.random()*flores.length)];
+    flor.className="flor";
+
+    flor.style.left = numero(20,80)+"%";
+    flor.style.top = numero(10,70)+"%";
+    flor.style.rotate = numero(-40,40)+"deg";
+    flor.style.scale = numero(0.7,1.2);
+
+    container.appendChild(flor);
+}
+
+</script>
+
+</body>
+</html>
