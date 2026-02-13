@@ -34,6 +34,7 @@ html,body{
 
 <div class="escena"></div>
 
+<audio id="bg-music" src="musica.mp3" loop></audio>
 <script>
 
 const flores = ["flor blanca.png","flor rosa.png","girasol.png"];
@@ -68,6 +69,24 @@ posiciones.forEach(pos => {
     container.appendChild(flor);
 });
 
+</script>
+
+<script>
+const music = document.getElementById("bg-music");
+
+function intentarReproducir(){
+    music.volume = 0.6;
+    music.play().catch(()=>{
+        document.addEventListener("click", iniciar, {once:true});
+        document.addEventListener("touchstart", iniciar, {once:true});
+    });
+}
+
+function iniciar(){
+    music.play();
+}
+
+window.addEventListener("load", intentarReproducir);
 </script>
 
 </body>
