@@ -4,91 +4,214 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Para ti</title>
+
 <style>
-html, body {
-    margin: 0;
-    height: 100%;
-    overflow: hidden;
-    background: url("fondo.png") center/cover no-repeat fixed;
-    font-family: Georgia, serif;
+html,body{
+    margin:0;
+    height:100%;
+    overflow:hidden;
+    background:url("fondo.png") center/cover no-repeat fixed;
+    font-family:Georgia,serif;
 }
 
 /* capa donde viven las flores */
-.escena {
-    position: fixed;
-    inset: 0;
+.escena{
+    position:fixed;
+    inset:0;
 }
 
 /* flores */
-.flor {
-    position: absolute;
-    width: 140px;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    will-change: transform;
+.flor{
+    position:absolute;
+    width:140px;
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+    will-change:transform;
+}
+/* controlador musica */
+.controles{
+    position:fixed;
+    top:15px;
+    left:15px;
+    z-index:9999;
+    background:rgba(0,0,0,0.45);
+    backdrop-filter:blur(6px);
+    padding:8px 10px;
+    border-radius:14px;
+    display:flex;
+    gap:6px;
+}
+
+.controles button{
+    border:none;
+    background:transparent;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+    padding:4px 6px;
+}
+
+.controles button:hover{
+    transform:scale(1.2);
+    opacity:.8;
 }
 
 /* BOTON MUSICA */
-#btnMusica {
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-    width: 70px;
-    height: 70px;
-    border-radius: 18px;
-    border: 1px solid rgba(255,255,255,0.25);
-    background: rgba(30,30,30,0.35);
+#btnMusica{
+    position:fixed;
+    bottom:25px;
+    right:25px;
+
+    width:70px;
+    height:70px;
+
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,0.25);
+
+    background:rgba(30,30,30,0.35);
     backdrop-filter: blur(10px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: all .25s ease;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.35),
-                inset 0 1px 0 rgba(255,255,255,0.25);
-}
-#btnMusica:hover { transform: scale(1.08); background: rgba(40,40,40,0.45); }
-#btnMusica:active { transform: scale(0.95); }
-#icono {
-    color: white;
-    font-size: 30px;
-    user-select: none;
+    -webkit-backdrop-filter: blur(10px);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    cursor:pointer;
+    transition:all .25s ease;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.25);
 }
 
-/* BOTON VOLUMEN */
-#btnVolumen {
-    position: fixed;
-    bottom: 25px;
-    right: 110px;
-    width: 70px;
-    height: 70px;
-    border-radius: 18px;
-    border: 1px solid rgba(255,255,255,0.25);
-    background: rgba(30,30,30,0.35);
-    backdrop-filter: blur(10px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: all .25s ease;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.35),
-                inset 0 1px 0 rgba(255,255,255,0.25);
-}
-#btnVolumen:hover { transform: scale(1.08); background: rgba(40,40,40,0.45); }
-#btnVolumen:active { transform: scale(0.95); }
-#iconoVolumen {
-    color: white;
-    font-size: 30px;
-    user-select: none;
+#btnMusica:hover{
+    transform:scale(1.08);
+    background:rgba(40,40,40,0.45);
 }
 
-/* SLIDER DE VOLUMEN */
-#volumen {
-    width: 110px;
-    appearance: none;
-    height: 6px;
-    border-radius: 10px;
-    background: rgba(30,30,30,0.35);
-    backdrop-filter: blur(10px);
-    outline: none;
-    border: 1
+#btnMusica:active{
+    transform:scale(0.95);
+}
+
+#icono{
+    color:white;
+    font-size:30px;
+    user-select:none;
+}
+</style>
+</head>
+<body>
+
+<div class="escena"></div>
+
+<button id="btnMusica">
+    <span id="icono">▶</span>
+</button>
+
+<audio id="bg-music" loop preload="auto">
+    <source src="musica.mp3" type="audio/mpeg">
+</audio>
+    
+<div class="controles">
+    <button id="menos">🔉</button>
+    <button id="mas">🔊</button>
+</div>
+
+<script>
+
+const flores = ["flor blanca.png","flor rosa.png","girasol.png"];
+const container = document.querySelector(".escena");
+
+const posiciones = [
+ {x:44.47, y:48.15, s:1.0},
+ {x:52.67, y:41.38, s:0.95},
+ {x:56.18, y:48.89, s:1.05},
+ {x:50.40, y:58.20, s:1.1},
+ {x:42.56, y:56.40, s:0.9},
+ {x:41.31, y:45.29, s:0.95},
+ {x:47.03, y:44.02, s:1.0}
+];
+
+posiciones.forEach(pos => {
+
+    let flor = document.createElement("img");
+    flor.src = flores[Math.floor(Math.random()*flores.length)];
+    flor.className = "flor";
+
+    let variacionX = (Math.random()*4)-2;     // -2 a +2
+    let variacionY = (Math.random()*3)-1.5;   // -1.5 a +1.5
+
+    flor.style.left = (pos.x + variacionX) + "%";
+    flor.style.top = (pos.y + variacionY) + "%";
+
+    let rotacion = (pos.x - 50) / 4;
+    flor.style.transform = `translate(-50%,-50%) scale(${pos.s}) rotate(${rotacion}deg)`;
+    flor.style.zIndex = Math.floor(pos.y);
+
+    container.appendChild(flor);
+});
+
+</script>
+
+<script>
+const music = document.getElementById("bg-music");
+
+function intentarReproducir(){
+    music.volume = 0.6;
+    music.play().catch(()=>{
+        document.addEventListener("click", iniciar, {once:true});
+        document.addEventListener("touchstart", iniciar, {once:true});
+    });
+}
+
+function iniciar(){
+    music.play();
+}
+
+window.addEventListener("load", intentarReproducir);
+</script>
+
+
+<script>
+const btn = document.getElementById("btnMusica");
+const icono = document.getElementById("icono");
+
+/* click manual */
+btn.addEventListener("click", () => {
+
+    if(music.paused){
+        music.play();
+    }else{
+        music.pause();
+    }
+
+});
+
+/* si empieza a reproducirse */
+music.addEventListener("play", () => {
+    icono.textContent = "⏸";
+});
+
+/* si se pausa */
+music.addEventListener("pause", () => {
+    icono.textContent = "▶";
+});
+</script>
+<script>
+const audio = document.getElementById("bg-music");
+const btnMas = document.getElementById("mas");
+const btnMenos = document.getElementById("menos");
+
+/* subir volumen */
+btnMas.onclick = () => {
+    audio.volume = Math.min(1, audio.volume + 0.1);
+};
+
+/* bajar volumen */
+btnMenos.onclick = () => {
+    audio.volume = Math.max(0, audio.volume - 0.1);
+};
+</script>
+
+</body>
+</html>
