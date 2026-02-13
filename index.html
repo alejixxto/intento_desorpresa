@@ -29,10 +29,11 @@ html,body{
 
 .flor{
     position:absolute;
-    width:90px;
+    width:140px;
     transform:translate(-50%,-50%);
     pointer-events:none;
 }
+
 </style>
 </head>
 <body>
@@ -46,25 +47,29 @@ html,body{
 const flores = ["flor blanca.png","flor rosa.png","girasol.png"];
 const container = document.querySelector(".container");
 
-function numero(min,max){
-    return Math.random()*(max-min)+min;
-}
+/* posiciones exactas sobre los tallos */
+const posiciones = [
+    {x:50, y:20},
+    {x:35, y:32},
+    {x:65, y:32},
+    {x:25, y:48},
+    {x:75, y:48},
+    {x:40, y:60},
+    {x:60, y:60}
+];
 
-const cantidad = 7;
-
-for(let i=0;i<cantidad;i++){
+posiciones.forEach(pos => {
 
     let flor = document.createElement("img");
     flor.src = flores[Math.floor(Math.random()*flores.length)];
     flor.className="flor";
 
-    flor.style.left = numero(20,80)+"%";
-    flor.style.top = numero(10,70)+"%";
-    flor.style.rotate = numero(-40,40)+"deg";
-    flor.style.scale = numero(0.7,1.2);
+    flor.style.left = pos.x + "%";
+    flor.style.top = pos.y + "%";
 
     container.appendChild(flor);
-}
+});
+
 
 </script>
 
