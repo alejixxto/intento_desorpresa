@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Para ti</title>
-
 <style>
 html, body {
     margin: 0;
@@ -29,64 +28,6 @@ html, body {
     will-change: transform;
 }
 
-/* controlador música */
-.controles {
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    z-index: 9999;
-    background: rgba(0,0,0,0.45);
-    backdrop-filter: blur(6px);
-    padding: 8px 10px;
-    border-radius: 14px;
-    display: flex;
-    gap: 6px;
-}
-
-.controles .icono {
-    font-size: 18px;
-}
-
-#volumen {
-    width: 110px;
-    appearance: none;
-    height: 6px;
-    border-radius: 10px;
-    background: rgba(30,30,30,0.35); /* fondo tipo vidrio */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    outline: none;
-    border: 1px solid rgba(255,255,255,0.25);
-    box-shadow:
-        0 8px 25px rgba(0,0,0,0.35),
-        inset 0 1px 0 rgba(255,255,255,0.25);
-    cursor: pointer;
-    transition: all 0.25s ease;
-}
-
-#volumen:hover {
-    background: rgba(40,40,40,0.45);
-}
-
-#volumen::-webkit-slider-thumb {
-    appearance: none;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: white;
-    cursor: pointer;
-    border: none;
-}
-
-#volumen::-moz-range-thumb {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: white;
-    cursor: pointer;
-    border: none;
-}
-
 /* BOTON MUSICA */
 #btnMusica {
     position: fixed;
@@ -103,20 +44,11 @@ html, body {
     align-items: center;
     cursor: pointer;
     transition: all .25s ease;
-    box-shadow:
-        0 8px 25px rgba(0,0,0,0.35),
-        inset 0 1px 0 rgba(255,255,255,0.25);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.35),
+                inset 0 1px 0 rgba(255,255,255,0.25);
 }
-
-#btnMusica:hover {
-    transform: scale(1.08);
-    background: rgba(40,40,40,0.45);
-}
-
-#btnMusica:active {
-    transform: scale(0.95);
-}
-
+#btnMusica:hover { transform: scale(1.08); background: rgba(40,40,40,0.45); }
+#btnMusica:active { transform: scale(0.95); }
 #icono {
     color: white;
     font-size: 30px;
@@ -139,126 +71,24 @@ html, body {
     align-items: center;
     cursor: pointer;
     transition: all .25s ease;
-    box-shadow:
-        0 8px 25px rgba(0,0,0,0.35),
-        inset 0 1px 0 rgba(255,255,255,0.25);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.35),
+                inset 0 1px 0 rgba(255,255,255,0.25);
 }
-
-#btnVolumen:hover {
-    transform: scale(1.08);
-    background: rgba(40,40,40,0.45);
-}
-
-#btnVolumen:active {
-    transform: scale(0.95);
-}
-
+#btnVolumen:hover { transform: scale(1.08); background: rgba(40,40,40,0.45); }
+#btnVolumen:active { transform: scale(0.95); }
 #iconoVolumen {
     color: white;
     font-size: 30px;
     user-select: none;
 }
-</style>
-</head>
-<body>
 
-<div class="escena"></div>
-
-<button id="btnMusica">
-    <span id="icono">▶</span>
-</button>
-
-<audio id="bg-music" loop preload="auto">
-    <source src="musica.mp3" type="audio/mpeg">
-</audio>
-
-<!-- BOTON DE VOLUMEN TRANSPARENTE -->
-<button id="btnVolumen">
-    <span id="iconoVolumen">🔊</span>
-</button>
-<input id="volumen" type="range" min="0" max="1" step="0.01" value="0.6">
-
-<script>
-// 🌸 FLORES
-const flores = ["flor blanca.png","flor rosa.png","girasol.png"];
-const container = document.querySelector(".escena");
-
-const posiciones = [
- {x:44.47, y:48.15, s:1.0},
- {x:52.67, y:41.38, s:0.95},
- {x:56.18, y:48.89, s:1.05},
- {x:50.40, y:58.20, s:1.1},
- {x:42.56, y:56.40, s:0.9},
- {x:41.31, y:45.29, s:0.95},
- {x:47.03, y:44.02, s:1.0}
-];
-
-posiciones.forEach(pos => {
-    let flor = document.createElement("img");
-    flor.src = flores[Math.floor(Math.random() * flores.length)];
-    flor.className = "flor";
-
-    let variacionX = (Math.random() * 4) - 2;
-    let variacionY = (Math.random() * 3) - 1.5;
-
-    flor.style.left = (pos.x + variacionX) + "%";
-    flor.style.top = (pos.y + variacionY) + "%";
-
-    let rotacion = (pos.x - 50) / 4;
-    flor.style.transform = `translate(-50%,-50%) scale(${pos.s}) rotate(${rotacion}deg)`;
-    flor.style.zIndex = Math.floor(pos.y);
-
-    container.appendChild(flor);
-});
-
-// 🎵 MÚSICA
-const music = document.getElementById("bg-music");
-const btn = document.getElementById("btnMusica");
-const icono = document.getElementById("icono");
-const slider = document.getElementById("volumen");
-const btnVolumen = document.getElementById("btnVolumen");
-const iconoVolumen = document.getElementById("iconoVolumen");
-
-// Intentar reproducir al cargar
-function intentarReproducir(){
-    music.volume = slider.value;
-    music.play().catch(()=>{
-        document.addEventListener("click", iniciar, {once:true});
-        document.addEventListener("touchstart", iniciar, {once:true});
-    });
-}
-function iniciar(){ music.play(); }
-window.addEventListener("load", intentarReproducir);
-
-// Botón de play/pause
-btn.addEventListener("click", () => {
-    if(music.paused){ music.play(); }
-    else { music.pause(); }
-});
-
-// Botón de volumen (mute/unmute)
-btnVolumen.addEventListener("click", ()=>{
-    if(music.volume > 0){
-        music.volume = 0;
-        slider.value = 0;
-        iconoVolumen.textContent = "🔇";
-    } else {
-        music.volume = 0.6;
-        slider.value = 0.6;
-        iconoVolumen.textContent = "🔊";
-    }
-});
-
-// Slider cambia volumen e icono automáticamente
-slider.addEventListener("input", (e)=>{
-    music.volume = e.target.value;
-    iconoVolumen.textContent = (e.target.value == 0) ? "🔇" : "🔊";
-});
-
-// Cambiar ícono del play según estado
-music.addEventListener("play", () => icono.textContent = "⏸");
-music.addEventListener("pause", () => icono.textContent = "▶");
-</script>
-
-</body>
-</html>
+/* SLIDER DE VOLUMEN */
+#volumen {
+    width: 110px;
+    appearance: none;
+    height: 6px;
+    border-radius: 10px;
+    background: rgba(30,30,30,0.35);
+    backdrop-filter: blur(10px);
+    outline: none;
+    border: 1
