@@ -12,7 +12,7 @@ html,body{
     display:flex;
     justify-content:center;
     align-items:center;
-    background:#000 url("fondo.png") center/cover no-repeat fixed;
+    background:#000;
     font-family:Georgia,serif;
     text-align:center;
 }
@@ -25,6 +25,7 @@ html,body{
 .base{
     width:100%;
     display:block;
+    pointer-events:none;
 }
 
 .flor{
@@ -39,7 +40,7 @@ html,body{
 <body>
 
 <div class="container">
-    <img src= class="base">
+    <img src="fondo.png" class="base">
 </div>
 
 <script>
