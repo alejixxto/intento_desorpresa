@@ -52,8 +52,39 @@ html, body {
     appearance: none;
     height: 6px;
     border-radius: 10px;
-    background: rgba(255,255,255,0.35);
+    background: rgba(30,30,30,0.35); /* fondo tipo vidrio */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     outline: none;
+    border: 1px solid rgba(255,255,255,0.25);
+    box-shadow:
+        0 8px 25px rgba(0,0,0,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.25);
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+#volumen:hover {
+    background: rgba(40,40,40,0.45);
+}
+
+#volumen::-webkit-slider-thumb {
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    border: none;
+}
+
+#volumen::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    border: none;
 }
 
 #volumen::-webkit-slider-thumb {
